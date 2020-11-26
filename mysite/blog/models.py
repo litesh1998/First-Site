@@ -4,6 +4,12 @@ from django.db.models.deletion import CASCADE
 from django.urls import reverse
 from django.utils import timezone
 
+
+
+class PublishedManager(models.Manager):
+    def get_queryset(self):
+        return super(PublishedManager,self).get_queryset().filter(status='published')
+
 class Post(models.Model):
 
     STATUS_CHOICES=(('draft', 'DRAFT'), ('published', 'Published'))
@@ -16,6 +22,10 @@ class Post(models.Model):
     updated=models.DateTimeField(auto_now=True)
     body=models.TextField()
     status=models.CharField(max_length=25, choices=STATUS_CHOICES, default='draft')
+
+
+    objects=models.Manager()
+    published=PublishedManager()
 
     class Meta:
         ordering = ('-publish',)
