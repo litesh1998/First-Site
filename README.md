@@ -1,2 +1,2 @@
 # mysite
-my first website made upon django framework. it is a blog bassed website
+my first website made upon django framework. it is a blog based website
