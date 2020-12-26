@@ -4,14 +4,20 @@ from .models import Post, Comment
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from .forms import EmailPostForm, CommentForm
 from django.core.mail import send_mail
+from taggit.models import Tag
 # Create your views here.
 
 
-def post_list(request):
+def post_list(request, tag_slug=None):
     objects = Post.published.all()
+    tag=None
+
+    if tag_slug:
+        tag=get_object_or_404(Tag, slug=tag_slug)
+        objects=objects.filter(tags__in=[tag])
+
     paginator = Paginator(objects, 3)
     page = request.GET.get('page')
-
     try:
         posts = paginator.page(page)
 
@@ -20,7 +26,7 @@ def post_list(request):
     except EmptyPage:
         posts = paginator.page(paginator.num_pages)
 
-    return render(request, 'blog/post/list.html', {'page': page, 'posts': posts})
+    return render(request, 'blog/post/list.html', {'page': page, 'posts': posts, 'tag':tag})
 
 
 def post_detail(request, year, month, day, post):
