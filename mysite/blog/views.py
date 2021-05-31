@@ -67,10 +67,10 @@ def post_share(request, post_id):
             to = cd['to']
             subject = f"{cd['name']} recommends that you read {post.title}"
             comment = f"Post url:{post.get_absolute_url()}\n\n {cd['name']}'s comments are:\n{cd['comment']}"
-            send_mail(subject, comment, 'admin@liteshgarg.com', [to])
+            send_mail(subject, comment, 'pheonix.code@gmail.com', [to], fail_silently=False)
             sent = True
     else:
-        form = EmailPostForm
+        form = EmailPostForm()
 
     return render(request, 'blog/post/share.html', {'form': form, 'post': post, 'sent': sent})
 
